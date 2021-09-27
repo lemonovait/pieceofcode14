@@ -29,6 +29,35 @@ import {GoogleCharts} from 'google-charts';
 ...
 */
 $(document).ready(function () {
+        
+        if ($('.pickadate').length > 0) {
+        $('.pickadate').each(function () {
+            setPickADate($(this));
+        });
+
+    }
+
+    if ($.fn.pickatime && $('.pickatime').length > 0) {
+        $('.pickatime').css('cursor', 'pointer');
+        $('.pickatime').pickatime({
+            format: 'h:i',
+            formatSubmit: 'h:i'
+        });
+    }
+
+    if ($('.bootstrap-select').length > 0) {
+        $('.bootstrap-select').each(function () {
+            $('.bootstrap-select').selectpicker();
+        });
+
+    }
+
+    if ($('[data-popup="lightbox"]').length > 0) {
+        $('[data-popup="lightbox"]').fancybox({
+            padding: 3
+        });
+    }
+        
 if ($('.calendar').length > 0) {
         $('.calendar').each(function () {
             let url = $(this).data('url');
@@ -89,4 +118,37 @@ if ($('.calendar').length > 0) {
             });
         });
     }
+        
+        if ($('.underscore_tabs').length > 0) {
+        $(".underscore_tabs").each(function () {
+            var gradeTable = $(this);
+            var gradeTemplate = _.template($('#grade-template').remove().text());
+
+            function removeTab(elKey) {
+                $("div#translation-content-" + elKey).remove();
+
+                $("div.tabbable > .nav > li").first().find('a').first().trigger('click');
+                $("li#translation-control-" + elKey).removeClass('active').toggle();
+                $('a.translation-add[data-rel="' + elKey + '"]').toggle();
+            }
+
+            $("a.translation-add").on('click', function (e) {
+                e.preventDefault();
+                var elKey = $(this).data('rel');
+                $(this).toggle();
+                $("li#translation-control-" + elKey).toggle();
+                $(gradeTemplate({key: elKey}))
+                    .appendTo(gradeTable).delegate('a.translation-remove', 'click', function () {
+                    removeTab(elKey);
+                });
+            });
+
+            $('a.translation-remove').on('click', function (e) {
+                var elKey = $(this).data('rel');
+                removeTab(elKey);
+            });
+
+        });
+    }
+        
     });
